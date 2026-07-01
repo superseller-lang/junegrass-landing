@@ -207,12 +207,11 @@
 
 <script>
   // ─────────────────────────────────────────────────────────────
-  // EMAIL CAPTURE — Junegrass founding list
-  // Brand Bible §10: capture to Klaviyo. Paste your list's form/POST
-  // endpoint below and signups flow straight in. Any endpoint that
-  // accepts a POST with an "email" field works (Klaviyo, Formspree, etc.).
-  // Until set, the form validates + shows success so the page is live today.
-  const FORM_ENDPOINT = ""; // e.g. Klaviyo list endpoint or "https://formspree.io/f/xxxx"
+  // EMAIL CAPTURE — Junegrass founding list → Klaviyo (Brand Bible §10)
+  // Uses Klaviyo's client-side subscription API (public key only, safe
+  // to expose). Signups land in the "Email List" audience.
+  const KLAVIYO_COMPANY_ID = "VCtE7r";      // public API key / site ID
+  const KLAVIYO_LIST_ID    = "T9VXJy";      // Email List
   // ─────────────────────────────────────────────────────────────
 
   const form = document.getElementById('capture');
@@ -231,10 +230,24 @@
     if (!isValid(email)) { msg.textContent = 'Please enter a valid email address.'; msg.classList.add('err'); return; }
     btn.disabled = true; btn.textContent = 'Joining…';
     try {
-      if (FORM_ENDPOINT) {
-        const res = await fetch(FORM_ENDPOINT, { method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'}, body: JSON.stringify({ email }) });
-        if (!res.ok) throw new Error('failed');
-      } else { await new Promise(r => setTimeout(r, 500)); }
+      const res = await fetch(`https://a.klaviyo.com/client/subscriptions/?company_id=${KLAVIYO_COMPANY_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'revision': '2024-10-15' },
+        body: JSON.stringify({
+          data: {
+            type: 'subscription',
+            attributes: {
+              custom_source: 'Coming Soon Landing Page',
+              profile: { data: { type: 'profile', attributes: {
+                email,
+                subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } }
+              } } }
+            },
+            relationships: { list: { data: { type: 'list', id: KLAVIYO_LIST_ID } } }
+          }
+        })
+      });
+      if (!res.ok) throw new Error('failed');
       showSuccess();
     } catch (err) {
       msg.textContent = 'Something went wrong — please try again.'; msg.classList.add('err');
