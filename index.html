@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Junegrass — Born in Texas. Made for your gut.</title>
+<meta name="description" content="Junegrass is a clean-label daily fiber + hydration ritual for the modern homestead. Born in Texas, blended in America, made with real ingredients. Join the list for the founding drop." />
+<meta property="og:title" content="Junegrass — Born in Texas. Made for your gut." />
+<meta property="og:description" content="A daily fiber + hydration ritual for the modern homestead. Real ingredients. Join the founding drop." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://drinkjunegrass.com" />
+<meta name="theme-color" content="#7a3d1a" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Junegrass — '90s country / '70s warm earth palette (from Brand Bible §4) */
+    --rust:      #b4531f;  /* hero warm — burnt orange / terracotta */
+    --rust-deep: #8f3d15;
+    --gold:      #d89b3a;  /* harvest gold / amber */
+    --coffee:    #3a291a;  /* saddle brown / coffee — type + deep bg */
+    --chestnut:  #5a3c24;
+    --camel:     #c9a875;  /* camel / wheat / tan */
+    --olive:     #6b7233;  /* hero green — olive / avocado */
+    --pine:      #3f4a2a;  /* deep green */
+    --sage:      #9ca986;  /* muted green */
+    --cream:     #f3e9d4;  /* cream / bone — backgrounds */
+    --cream-2:   #ece0c6;
+    --bone:      #f8f1e2;
+    --ink:       #34251a;
+    --muted:     #6f5b45;
+    --radius: 14px;
+    --maxw: 1060px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(1100px 520px at 78% -8%, rgba(216,155,58,.42), transparent 60%),
+      radial-gradient(900px 500px at 12% 108%, rgba(107,114,51,.28), transparent 62%),
+      var(--cream);
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+  /* warm film grain overlay */
+  body::after {
+    content:""; position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: .05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 26px 0;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand .mark { font-family: 'Fraunces', serif; font-weight: 600; font-size: 23px; letter-spacing: .01em; color: var(--coffee); }
+  .brand .mark span { color: var(--olive); }
+  .nav-tag {
+    font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--rust); border: 1.5px solid rgba(180,83,31,.4); padding: 6px 12px; border-radius: 999px;
+  }
+
+  .hero { padding: 44px 0 68px; text-align: center; }
+  .eyebrow {
+    display: inline-block; font-family: 'Fraunces', serif; font-style: italic; font-weight: 500;
+    font-size: 15px; letter-spacing: .02em; color: var(--rust);
+    margin-bottom: 22px;
+  }
+  .eyebrow::before, .eyebrow::after { content:"·"; margin: 0 10px; color: var(--camel); }
+  h1 {
+    font-family: 'Fraunces', serif; font-weight: 600; letter-spacing: -.015em;
+    font-size: clamp(42px, 7.4vw, 82px); line-height: 1.0; color: var(--coffee);
+    max-width: 15ch; margin: 0 auto 22px;
+  }
+  h1 em { font-style: italic; color: var(--olive); }
+  .sub { font-size: clamp(17px, 2.1vw, 20px); color: var(--muted); max-width: 50ch; margin: 0 auto 38px; }
+
+  /* Signup */
+  .signup { max-width: 500px; margin: 0 auto; }
+  form.capture {
+    display: flex; gap: 10px; background: var(--bone); padding: 8px; border-radius: 999px;
+    box-shadow: 0 14px 34px rgba(58,41,26,.14); border: 1px solid var(--cream-2);
+  }
+  form.capture input {
+    flex: 1; border: 0; outline: 0; background: transparent; font-size: 16px; padding: 12px 20px; color: var(--ink);
+    font-family: inherit;
+  }
+  form.capture input::placeholder { color: #a58f74; }
+  form.capture button {
+    border: 0; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 15px;
+    background: var(--rust); color: var(--bone); padding: 13px 26px; border-radius: 999px;
+    transition: background .15s ease, transform .1s ease; white-space: nowrap;
+  }
+  form.capture button:hover { background: var(--rust-deep); }
+  form.capture button:active { transform: scale(.98); }
+  form.capture button:disabled { opacity: .6; cursor: default; }
+  .form-note { font-size: 13.5px; color: var(--muted); margin-top: 15px; }
+  .msg { margin-top: 14px; font-size: 15px; font-weight: 500; min-height: 20px; }
+  .msg.ok { color: var(--olive); }
+  .msg.err { color: #a83a1e; }
+
+  .success-card { display: none; background: var(--bone); border: 1px solid var(--cream-2); border-radius: var(--radius); padding: 34px 28px; box-shadow: 0 14px 34px rgba(58,41,26,.14); }
+  .success-card h3 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 25px; color: var(--coffee); margin-bottom: 8px; }
+  .success-card p { color: var(--muted); font-size: 15px; }
+
+  /* Feature strip */
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 74px 0 20px; }
+  .feature {
+    background: rgba(248,241,226,.72); border: 1px solid var(--cream-2); border-radius: var(--radius);
+    padding: 26px; text-align: left;
+  }
+  .feature .ico { width: 46px; height: 46px; border-radius: 12px; background: rgba(107,114,51,.14); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .feature h4 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 20px; color: var(--coffee); margin-bottom: 6px; }
+  .feature p { font-size: 14.5px; color: var(--muted); }
+
+  .founding {
+    margin: 20px auto 0; max-width: 640px; text-align: center;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 16px; color: var(--chestnut);
+  }
+
+  footer { text-align: center; padding: 46px 0 40px; color: var(--muted); font-size: 13px; }
+  footer .rule { width: 60px; height: 1.5px; background: var(--camel); margin: 0 auto 22px; opacity: .6; }
+  footer a { color: var(--rust); text-decoration: none; }
+  footer .fine { display: block; margin-top: 10px; font-size: 11.5px; color: #9d876d; max-width: 46ch; margin-left: auto; margin-right: auto; }
+
+  @media (max-width: 720px) {
+    .features { grid-template-columns: 1fr; }
+    form.capture { flex-direction: column; border-radius: var(--radius); padding: 12px; }
+    form.capture input { text-align: center; }
+    form.capture button { width: 100%; padding: 15px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 22c0-6 0-10 3-14-1 4-1 8-1 8s3-3 5-3c-1 4-4 7-7 7z" fill="#6b7233"/>
+          <path d="M12 22c0-6 0-11-4-15 1 5 1 9 1 9s-3-2-5-2c1 4 5 8 8 8z" fill="#9ca986"/>
+        </svg>
+        <span class="mark">June<span>grass</span></span>
+      </div>
+      <div class="nav-tag">Coming Soon</div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <span class="eyebrow">Born in Texas · Blended in America</span>
+        <h1>Born in Texas. <em>Made for your gut.</em></h1>
+        <p class="sub">Junegrass is a clean-label daily fiber &amp; hydration ritual for the modern homestead — real ingredients, no chalk, no fuss. Named for the green-gold prairie grass of early summer. We're launching soon.</p>
+
+        <div class="signup">
+          <form class="capture" id="capture" novalidate>
+            <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address" />
+            <button type="submit" id="submit">Join the list</button>
+          </form>
+          <div class="msg" id="msg" role="status" aria-live="polite"></div>
+          <p class="form-note">Get first dibs on the founding drop — <em>the first 500 jars, born in Texas</em> — plus a launch-day discount. No spam, ever.</p>
+
+          <div class="success-card" id="success">
+            <h3>You're on the list. 🌾</h3>
+            <p>Well, bless your gut. We'll holler the moment Junegrass is ready — and founding-list folks get first pick of the first 500 jars.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="features">
+        <div class="feature">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3c4 3 6 6 6 10a6 6 0 11-12 0c0-4 2-7 6-10z" stroke="#6b7233" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+          <h4>Real prebiotic fiber</h4>
+          <p>A blend of real plant fibers that supports regularity and digestive comfort — the way great-grandma would've wanted.</p>
+        </div>
+        <div class="feature">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-10a4 4 0 017-2 4 4 0 017 2c0 5.5-7 10-7 10z" stroke="#6b7233" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+          <h4>Hydration, handled</h4>
+          <p>Fiber plus hydration support in one easy ritual. Regular as a Texas sunrise, smooth as a porch evening.</p>
+        </div>
+        <div class="feature">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="#6b7233" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h4>Clean label, real taste</h4>
+          <p>Light and refreshing in water — no grit, no chalk, no forcing it down. Made with ingredients you can pronounce.</p>
+        </div>
+      </section>
+
+      <p class="founding">"Green-gold and good for you." — real fiber for the modern homestead.</p>
+    </main>
+
+    <footer>
+      <div class="rule"></div>
+      <p>&copy; 2026 Junegrass · Made in America with real ingredients · <a href="mailto:hello@drinkjunegrass.com">hello@drinkjunegrass.com</a></p>
+      <span class="fine">These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</span>
+    </footer>
+  </div>
+
+<script>
+  // ─────────────────────────────────────────────────────────────
+  // EMAIL CAPTURE — Junegrass founding list
+  // Brand Bible §10: capture to Klaviyo. Paste your list's form/POST
+  // endpoint below and signups flow straight in. Any endpoint that
+  // accepts a POST with an "email" field works (Klaviyo, Formspree, etc.).
+  // Until set, the form validates + shows success so the page is live today.
+  const FORM_ENDPOINT = ""; // e.g. Klaviyo list endpoint or "https://formspree.io/f/xxxx"
+  // ─────────────────────────────────────────────────────────────
+
+  const form = document.getElementById('capture');
+  const emailInput = document.getElementById('email');
+  const msg = document.getElementById('msg');
+  const btn = document.getElementById('submit');
+  const successCard = document.getElementById('success');
+  const isValid = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+  function showSuccess() { form.style.display = 'none'; msg.textContent=''; successCard.style.display='block'; }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    msg.className = 'msg';
+    if (!isValid(email)) { msg.textContent = 'Please enter a valid email address.'; msg.classList.add('err'); return; }
+    btn.disabled = true; btn.textContent = 'Joining…';
+    try {
+      if (FORM_ENDPOINT) {
+        const res = await fetch(FORM_ENDPOINT, { method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'}, body: JSON.stringify({ email }) });
+        if (!res.ok) throw new Error('failed');
+      } else { await new Promise(r => setTimeout(r, 500)); }
+      showSuccess();
+    } catch (err) {
+      msg.textContent = 'Something went wrong — please try again.'; msg.classList.add('err');
+      btn.disabled = false; btn.textContent = 'Join the list';
+    }
+  });
+</script>
+</body>
+</html>
