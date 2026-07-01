@@ -238,10 +238,7 @@
             type: 'subscription',
             attributes: {
               custom_source: 'Coming Soon Landing Page',
-              profile: { data: { type: 'profile', attributes: {
-                email,
-                subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } }
-              } } }
+              profile: { data: { type: 'profile', attributes: { email } } }
             },
             relationships: { list: { data: { type: 'list', id: KLAVIYO_LIST_ID } } }
           }
