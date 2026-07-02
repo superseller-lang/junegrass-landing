@@ -210,7 +210,7 @@ Error generating stack: `+i.message+`
 .jg-legal + .jg-legal{margin-top:10px}
 
 .jg-vid{width:100%; height:100%; object-fit:cover; filter:sepia(.22) saturate(1.08) contrast(.98) brightness(1.02)}
-.jg-story-img-mobile{display:none}
+.jg-root .jg-story-img-mobile{display:none}
 .jg-band-text{padding:110px 40px; text-align:center}
 .jg-band-h{margin-bottom:22px}
 .jg-band-line{font-size:19px; color:var(--saddle); max-width:640px; margin:0 auto; line-height:1.6}
@@ -273,7 +273,7 @@ Error generating stack: `+i.message+`
   .jg-tiles{grid-template-columns:1fr}
   .jg-story{min-height:70vh; padding:72px 24px}
   .jg-vid-desktop{display:none}
-  .jg-story-img-mobile{display:block}
+  .jg-root .jg-story-img-mobile{display:block}
   .jg-join{padding:72px 24px}
   .jg-scrollcue{display:none}
   .jg-midcta{padding:64px 24px}
