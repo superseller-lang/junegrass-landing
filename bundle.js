@@ -95,7 +95,7 @@ Error generating stack: `+i.message+`
 /* hero */
 .jg-hero{position:relative; min-height:92vh; display:flex; align-items:flex-end;
   overflow:hidden; padding:0 40px 76px}
-.jg-hero-img{position:absolute; inset:0; z-index:0; object-position:50% 18%}
+.jg-hero-img{position:absolute; inset:0; z-index:0; object-position:50% 42%}
 .jg-hero-veil{position:absolute; inset:0; z-index:1;
   background:linear-gradient(180deg, rgba(44,29,18,.28) 0%, rgba(44,29,18,0) 32%, rgba(44,29,18,.55) 78%, rgba(44,29,18,.82) 100%)}
 .jg-hero-inner{position:relative; z-index:2; max-width:660px}
