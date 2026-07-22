@@ -406,10 +406,28 @@
     }, true);
   }
 
+  /* ---- Klaviyo onsite: bind the session (its IP/geolocation) to the profile
+   * ---- on signup, so Klaviyo can set Location. Additive: does NOT subscribe
+   * ---- or trigger a welcome — the existing client-API call still owns that. */
+  function bindKlaviyoIdentify() {
+    document.addEventListener("submit", function (e) {
+      try {
+        var form = e.target;
+        var input = (form && form.querySelector) ? form.querySelector('input[type="email"]') : null;
+        var email = (input && input.value) ? input.value.trim() : "";
+        if (email && email.indexOf("@") > 0) {
+          window.klaviyo = window.klaviyo || [];
+          window.klaviyo.push(["identify", { "$email": email }]);
+        }
+      } catch (err) {}
+    }, true);
+  }
+
   /* ---- Boot -------------------------------------------------------------- */
   function boot() {
     build();
     watchForms();
+    bindKlaviyoIdentify();
     // Poll: kol.js and its form handler initialize asynchronously, so keep
     // (idempotently) wiring until the redirect-blocking replacement sticks.
     var tries = 0;
