@@ -24,9 +24,179 @@
 {"@context":"https://schema.org","@type":"Organization","name":"Junegrass","url":"https://drinkjunegrass.com","email":"hello@drinkjunegrass.com","brand":{"@type":"Brand","name":"Junegrass"}}
 </script>
 <style>html,body{margin:0;padding:0;background:#372619}#root{min-height:100vh}</style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2166874844107193');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2166874844107193&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<!-- Junegrass founding-list enrichment: invisible UTM/landing attribution + post-signup flavor vote.
+     ADDITIVE ONLY. Does not modify the signup form or the app bundle. Everything is wrapped in
+     try/catch and, on any failure, falls through to the site's normal behavior so a signup can
+     never be blocked or broken by this script. -->
+<script>
+(function(){
+  "use strict";
+  try {
+    var KL_COMPANY = "VCtE7r";
+    var SUB_MATCH  = "a.klaviyo.com/client/subscriptions";
+    var REV        = "2024-10-15";
+
+    // 1) Capture attribution once, on load (UTMs persist across in-session navigation).
+    var ATTR = {};
+    try {
+      var q = new URLSearchParams(location.search);
+      ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(k){
+        var v = q.get(k); if (v) ATTR[k] = v;
+      });
+      ATTR.landing_page = location.pathname;
+      if (document.referrer) ATTR.referrer = document.referrer;
+      try {
+        var saved = JSON.parse(sessionStorage.getItem("jg_attr") || "{}");
+        Object.keys(saved).forEach(function(k){ if (ATTR[k] == null) ATTR[k] = saved[k]; });
+        sessionStorage.setItem("jg_attr", JSON.stringify(ATTR));
+      } catch(e) {}
+    } catch(e) {}
+
+    var lastEmail = null;
+    var voteShown = false;
+
+    // 2) Wrap fetch: enrich the subscribe body with attribution, and detect a successful signup.
+    //    On ANY problem we call the original fetch with the original arguments.
+    var origFetch = window.fetch.bind(window);
+    window.fetch = function(input, init){
+      try {
+        if (typeof input === "string" && input.indexOf(SUB_MATCH) !== -1 &&
+            init && typeof init.body === "string") {
+          try {
+            var payload = JSON.parse(init.body);
+            var prof = payload && payload.data && payload.data.attributes &&
+                       payload.data.attributes.profile && payload.data.attributes.profile.data &&
+                       payload.data.attributes.profile.data.attributes;
+            if (prof) {
+              if (prof.email) lastEmail = prof.email;
+              var props = prof.properties || {};
+              Object.keys(ATTR).forEach(function(k){ if (props[k] == null) props[k] = ATTR[k]; });
+              prof.properties = props;
+              init = Object.assign({}, init, { body: JSON.stringify(payload) });
+            }
+          } catch(e) { /* malformed body: leave the request exactly as-is */ }
+
+          var email = lastEmail;
+          return origFetch(input, init).then(function(res){
+            try { if (res && (res.ok || res.status === 202)) showVote(email); } catch(e) {}
+            return res;
+          });
+        }
+      } catch(e) {}
+      return origFetch(input, init);
+    };
+
+    // 3) Post-signup flavor vote (rendered on document.body, OUTSIDE the React tree).
+    var FLAVORS = [["peach-mango","🍑 Peach Mango"],["watermelon-lime","🍉 Watermelon Lime"]];
+
+    function sendVote(email, slug){
+      if (!email) return;
+      var now = new Date().toISOString();
+      // a) Event -> creates a "Voted for Flavor" metric AND sets the profile properties.
+      try {
+        origFetch("https://a.klaviyo.com/client/events/?company_id=" + KL_COMPANY, {
+          method:"POST", headers:{ "Content-Type":"application/json", revision:REV },
+          body: JSON.stringify({ data:{ type:"event", attributes:{
+            properties:{ flavor:slug, source:"post_signup_landing" },
+            metric:{ data:{ type:"metric", attributes:{ name:"Voted for Flavor" } } },
+            profile:{ data:{ type:"profile", attributes:{ email:email, properties:{
+              flavor_vote:slug, flavor_vote_date:now, flavor_vote_source:"post_signup_landing"
+            }}}}
+          }}})
+        }).catch(function(){});
+      } catch(e) {}
+      // b) Profile upsert -> belt-and-suspenders so the property is set even if (a) is delayed.
+      try {
+        origFetch("https://a.klaviyo.com/client/profiles/?company_id=" + KL_COMPANY, {
+          method:"POST", headers:{ "Content-Type":"application/json", revision:REV },
+          body: JSON.stringify({ data:{ type:"profile", attributes:{ email:email, properties:{
+            flavor_vote:slug, flavor_vote_date:now, flavor_vote_source:"post_signup_landing"
+          }}}})
+        }).catch(function(){});
+      } catch(e) {}
+    }
+
+    function showVote(email){
+      if (voteShown) return; voteShown = true;
+      try { if (sessionStorage.getItem("jg_voted") === "1") return; } catch(e) {}
+      try {
+        var wrap = document.createElement("div");
+        wrap.setAttribute("role","dialog");
+        wrap.setAttribute("aria-label","Which flavor should we make first?");
+        wrap.style.cssText = "position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:2147483000;max-width:360px;width:calc(100% - 32px);background:#2C1D12;color:#F0E6CE;border:1px solid #C6A268;border-radius:14px;padding:18px 18px 16px;box-shadow:0 14px 44px rgba(0,0,0,.45);font-family:Georgia,serif;text-align:center";
+
+        var close = document.createElement("button");
+        close.type = "button"; close.setAttribute("aria-label","Close");
+        close.textContent = "×";
+        close.style.cssText = "position:absolute;top:6px;right:12px;background:none;border:0;color:#C6A268;font-size:22px;line-height:1;cursor:pointer";
+        close.onclick = function(){ try { wrap.remove(); } catch(e) {} };
+
+        var kicker = document.createElement("div");
+        kicker.textContent = "You're on the homestead list";
+        kicker.style.cssText = "font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#DFC796;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:6px";
+
+        var ask = document.createElement("div");
+        ask.textContent = "One quick thing — which pour should we make first?";
+        ask.style.cssText = "font-size:16px;line-height:1.4;margin-bottom:14px";
+
+        var row = document.createElement("div");
+        row.style.cssText = "display:flex;gap:8px;justify-content:center;flex-wrap:wrap";
+
+        FLAVORS.forEach(function(f){
+          var b = document.createElement("button");
+          b.type = "button"; b.textContent = f[1];
+          b.style.cssText = "flex:1;min-width:132px;cursor:pointer;background:#B4451A;color:#F6EEDA;border:0;border-radius:8px;padding:12px 12px;font-size:13px;letter-spacing:.5px;text-transform:uppercase;font-family:ui-monospace,SFMono-Regular,Menlo,monospace";
+          b.onclick = function(){
+            try { sendVote(email, f[0]); } catch(e) {}
+            try { sessionStorage.setItem("jg_voted","1"); } catch(e) {}
+            try { if (window.fbq) window.fbq("trackCustom","FlavorVote",{ flavor:f[0] }); } catch(e) {}
+            try {
+              kicker.textContent = "Vote counted";
+              ask.textContent = "Noted — thank you, partner.";
+              row.style.display = "none";
+              skip.style.display = "none";
+              setTimeout(function(){ try { wrap.remove(); } catch(e) {} }, 1700);
+            } catch(e) {}
+          };
+          row.appendChild(b);
+        });
+
+        var skip = document.createElement("button");
+        skip.type = "button"; skip.textContent = "Maybe later";
+        skip.style.cssText = "margin-top:12px;background:none;border:0;color:#C6A268;font-size:12px;cursor:pointer;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.5px";
+        skip.onclick = function(){ try { wrap.remove(); } catch(e) {} };
+
+        wrap.appendChild(close); wrap.appendChild(kicker); wrap.appendChild(ask);
+        wrap.appendChild(row); wrap.appendChild(skip);
+        (document.body || document.documentElement).appendChild(wrap);
+      } catch(e) {}
+    }
+  } catch(e) {}
+})();
+</script>
+<!-- End Junegrass enrichment -->
 </head>
 <body>
 <div id="root"></div>
-<script src="/bundle.v9.js" defer></script>
+<script src="https://b.kickoffpages.com/2.2.0/kol.js" id="koljs" data-campaign-id="195119" async></script>
+<script src="/referral.js" defer></script>
+<script src="/bundle.v10.js" defer></script>
 </body>
 </html>
